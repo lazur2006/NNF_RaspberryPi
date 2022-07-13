@@ -9,9 +9,9 @@ setup(
     author_email='none@none.io',    
     license='MIT',
     packages=['NNF'],
-#    install_requires=['mpi4py>=2.0',
-#                      'numpy',
-#                      ],
+    install_requires=['mpi4py>=2.0',
+                      'numpy',
+                      ],
 
     classifiers=[
         'Development Status :: 1 - Planning',
