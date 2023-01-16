@@ -31,7 +31,7 @@ deactivate
 cd ~
 printf "[Unit]\nDescription=Flask Web Application Server using Gunicorn\nAfter=network.target\n\n[Service]\nUser=$username\nGroup=$username\nWorkingDirectory=/home/$username/git/NNF\nEnvironment="PATH=/home/$username/git/NNF/menv/bin"\nExecStart=sudo /bin/bash -c 'mkdir -p /tmp/my-server; source /home/$username/git/NNF/menv/bin/activate; gunicorn -w 1 -k gthread --thread=8 --bind unix:/tmp/my-server/ipc.sock app:app --preload --error-logfile /home/$username/git/NNF/log.log --capture-output --log-level debug;'\n\nRestart=always\n\n[Install]\nWantedBy=multi-user.target\n" | sudo tee /etc/systemd/system/my-server.service
 mkdir -p /tmp/my-server
-printf "server {\nlisten 80;\nlisten [::]:80;\nserver_name $(hostname).local;\n\nlocation / {\nproxy_buffering off;\nproxy_cache off;\nproxy_set_header Connection '';\nproxy_http_version 1.1;\nchunked_transfer_encoding off;\ninclude proxy_params;\nproxy_pass http://unix:/tmp/my-server/ipc.sock;\n}\n}" | sudo tee /etc/nginx/sites-available/my-server
+printf "server {\nlisten 80;\nlisten [::]:80;\nserver_name $deviceipaddress $(hostname).local;\n\nlocation / {\nproxy_buffering off;\nproxy_cache off;\nproxy_set_header Connection '';\nproxy_http_version 1.1;\nchunked_transfer_encoding off;\ninclude proxy_params;\nproxy_pass http://unix:/tmp/my-server/ipc.sock;\n}\n}" | sudo tee /etc/nginx/sites-available/my-server
 sudo nginx -t
 sudo ln -s /etc/nginx/sites-available/my-server /etc/nginx/sites-enabled/
 sudo ls -l  /etc/nginx/sites-enabled/
